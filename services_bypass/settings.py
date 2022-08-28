@@ -158,7 +158,7 @@ CORS_ALLOW_HEADERS = (
 
 # Celery 配置, 必须以 CELERY_ 开头
 # 中间人
-CELERY_BROKER_URL = os.getenv("BROKER", "redis://localhost:6379/0")
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER")
 # 重启任务不丢失配置
 CELERY_TASK_REJECT_ON_WORKER_LOST = True
 CELERY_TASK_ACKS_LATE = True
