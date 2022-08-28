@@ -1,20 +1,28 @@
+import time, os
+from concurrent.futures import ThreadPoolExecutor
+
 from services_bypass.celery import app
 from .models import Service
 
 import httpx
 
+TIMES = 3
+# 线程执行池
+executor = ThreadPoolExecutor(max_workers=os.getenv('MAX_WORKERS', 8))
+
 
 # 心跳检测
-def try_ping_pong_times(service: Service, times=3):
+def try_ping_pong_times(service: Service):
     count = 0
-    while count < times:
+    while count < TIMES:
         r = httpx.get(f'{service.server}/{service.pong}')
         try:
             assert r.status_code == 200
             return
         except Exception as e:
-            if count <= times:
+            if count <= TIMES:
                 print(f'第{count + 1}次心跳检测: 失败')
+                time.sleep(10)
             else:
                 print(f"{service.name}服务丢失: {e}")
                 service.delete()
@@ -24,5 +32,5 @@ def try_ping_pong_times(service: Service, times=3):
 
 @app.task(name='loop_ping_pong')
 def loop_query_task():
-    for service in Service.objects.all():
-        try_ping_pong_times(service)
+    services = Service.objects.all()
+    executor.map(try_ping_pong_times, services)
