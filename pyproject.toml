@@ -7,7 +7,7 @@ authors = ["h2magic <h2magic@126.com>"]
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.1"
-celery = "^5.2.7"
+celery = {extras = ["redis"], version = "^5.2.7"}
 python-dotenv = "^0.20.0"
 djangorestframework = "^3.13.1"
 psycopg2-binary = "^2.9.3"
