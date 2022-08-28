@@ -14,6 +14,7 @@ class ServiceRegister(APIView):
             assert 'name' in request.data
             assert 'server_host' in request.data
             assert 'server_port' in request.data
+            assert 'pong' in request.data
             return True, None
         except Exception as e:
             return False, str(e)
