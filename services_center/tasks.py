@@ -15,9 +15,10 @@ executor = ThreadPoolExecutor(max_workers=os.getenv('MAX_WORKERS', 8))
 def try_ping_pong_times(service: Service):
     count = 0
     while count < TIMES:
-        r = httpx.get(f'{service.server}/{service.pong}')
+        r = httpx.get(f'{service.server()}/ping')
         try:
             assert r.status_code == 200
+            assert r.json()['result'] == 'pong'
             return
         except Exception as e:
             if count <= TIMES:

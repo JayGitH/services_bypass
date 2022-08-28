@@ -19,7 +19,7 @@ app.conf.update(
 app.conf.beat_schedule = {
     'loop-every': {
         'task': 'loop_ping_pong',
-        'schedule': 180,
+        'schedule': 600,
         'args': ()
     },
 }
